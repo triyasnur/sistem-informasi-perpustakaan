@@ -9,10 +9,8 @@ Aplikasi ini dibuat sebagai project kelompok dengan fitur CRUD dan autentikasi p
 Project ini dikerjakan secara kelompok:
 
 - Ketua: Triyas Nurlita Nurul Adha  
-- Anggota 1: (Nama teman kamu 1)  
-- Anggota 2: (Nama teman kamu 2)  
-- Anggota 3: (jika ada)
-
+- Anggota 2: Risma Sari   Florentina Lobemato  
+- Anggota 3: Florentina Lobemato  
 
 ## 🚀 Fitur Utama
 
