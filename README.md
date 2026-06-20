@@ -4,6 +4,15 @@ Sistem Informasi Perpustakaan berbasis Laravel untuk mengelola data buku secara 
 Aplikasi ini dibuat sebagai project kelompok dengan fitur CRUD dan autentikasi pengguna.
 
 ---
+## 👥 Anggota Tim
+
+Project ini dikerjakan secara kelompok:
+
+- Ketua: Triyas Nurlita Nurul Adha  
+- Anggota 1: (Nama teman kamu 1)  
+- Anggota 2: (Nama teman kamu 2)  
+- Anggota 3: (jika ada)
+
 
 ## 🚀 Fitur Utama
 
