@@ -55,6 +55,17 @@
             <span>Data Buku</span>
         </a>
 
+        {{-- PEMINJAMAN --}}
+        <a href="{{ route('transactions.index') }}"
+           class="flex items-center gap-3 px-6 py-3 text-sm font-medium rounded-xl mx-3 transition
+           {{ request()->routeIs('transactions.*') 
+                ? 'bg-[#F0EBF7] text-[#6C4E97] font-semibold' 
+                : 'text-gray-600 hover:bg-gray-50' }}">
+
+            <i class="fa-solid fa-arrow-right-arrow-left w-5 text-center"></i>
+            <span>Peminjaman</span>
+        </a>
+
     </nav>
 
 </aside>

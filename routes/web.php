@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Book;
 use Illuminate\Support\Facades\DB; // Tambahkan ini untuk akses DB::raw
@@ -37,6 +38,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // CRUD Buku
     Route::resource('books', BookController::class);
+
+    // Sirkulasi / Peminjaman
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/members/create', [TransactionController::class, 'createMember'])->name('transactions.create_member');
+    Route::post('/transactions/members', [TransactionController::class, 'storeMember'])->name('transactions.store_member');
+    Route::get('/transactions/peminjaman/create', [TransactionController::class, 'createPeminjaman'])->name('transactions.create_peminjaman');
+    Route::post('/transactions/peminjaman', [TransactionController::class, 'storePeminjaman'])->name('transactions.store_peminjaman');
+    Route::put('/transactions/{id}/return', [TransactionController::class, 'returnBuku'])->name('transactions.return_buku');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
