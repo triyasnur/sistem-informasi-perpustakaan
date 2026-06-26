@@ -14,9 +14,11 @@ class BookController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
 
-            $query->where('kode_buku', 'like', "%{$search}%")
+            $query->where(function($q) use ($search) {
+                $q->where('kode_buku', 'like', "%{$search}%")
                   ->orWhere('judul', 'like', "%{$search}%")
                   ->orWhere('penulis', 'like', "%{$search}%");
+            });
         }
 
         if ($request->filled('kategori')) {
@@ -40,14 +42,18 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'kode_buku' => 'required',
-            'judul' => 'required',
-            'penulis' => 'required',
+        $validated = $request->validate([
+            'kode_buku' => 'required|unique:books,kode_buku',
+            'judul' => 'required|string|max:255',
+            'penulis' => 'required|string|max:255',
+            'penerbit' => 'nullable|string|max:255',
+            'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
+            'kategori' => 'nullable|string|max:100',
             'stok' => 'required|integer|min:0',
+            'deskripsi' => 'nullable|string',
         ]);
 
-        Book::create($request->all());
+        Book::create($validated);
 
         return redirect()->route('books.index')
             ->with('success', 'Buku berhasil ditambahkan');
@@ -65,14 +71,18 @@ class BookController extends Controller
 
     public function update(Request $request, Book $book)
     {
-        $request->validate([
-            'kode_buku' => 'required',
-            'judul' => 'required',
-            'penulis' => 'required',
+        $validated = $request->validate([
+            'kode_buku' => 'required|unique:books,kode_buku,' . $book->id,
+            'judul' => 'required|string|max:255',
+            'penulis' => 'required|string|max:255',
+            'penerbit' => 'nullable|string|max:255',
+            'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
+            'kategori' => 'nullable|string|max:100',
             'stok' => 'required|integer|min:0',
+            'deskripsi' => 'nullable|string',
         ]);
 
-        $book->update($request->all());
+        $book->update($validated);
 
         return redirect()->route('books.index')
             ->with('success', 'Buku berhasil diperbarui');

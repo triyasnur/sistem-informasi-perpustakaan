@@ -30,15 +30,15 @@ class TransactionController extends Controller
     // 3. Simpan Anggota Baru
     public function storeMember(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nomor_anggota' => 'required|unique:members,nomor_anggota',
             'nama' => 'required|string|max:255',
             'jenis_kelamin' => 'required|in:L,P',
-            'telepon' => 'required',
-            'alamat' => 'required',
+            'telepon' => 'required|string|max:20',
+            'alamat' => 'required|string',
         ]);
 
-        Member::create($request->all());
+        Member::create($validated);
 
         return redirect()->route('transactions.index')->with('success', 'Anggota baru berhasil didaftarkan!');
     }
@@ -48,7 +48,7 @@ class TransactionController extends Controller
     {
         $members = Member::all();
         // Hanya memunculkan buku yang stoknya lebih dari 0
-        $books = Book::all(); 
+        $books = Book::where('stok', '>', 0)->get();
 
         return view('transactions.create_peminjaman', compact('members', 'books'));
     }
