@@ -12,13 +12,12 @@ class TransactionController extends Controller
     // 1. Tampilan Utama (Dua Tabel: Anggota & Sirkulasi)
     public function index()
     {
-        // Mengambil semua data anggota
         $members = Member::latest()->get();
-        
-        // Mengambil data transaksi beserta relasi buku dan anggotanya
-        $transactions = Transaction::with(['book', 'member'])->latest()->get();
+        $books = Book::latest()->get();
+        $transactions = Transaction::with(['book', 'member'])->where('status', 'dipinjam')->latest()->get();
+        $returnedTransactions = Transaction::with(['book', 'member'])->where('status', 'dikembalikan')->latest()->get();
 
-        return view('transactions.index', compact('members', 'transactions'));
+        return view('transactions.index', compact('members', 'books', 'transactions', 'returnedTransactions'));
     }
 
     // 2. Form Tambah Anggota

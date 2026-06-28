@@ -5,6 +5,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Book;
+use App\Models\Member;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\DB; // Tambahkan ini untuk akses DB::raw
 
 Route::get('/', function () {
@@ -16,7 +18,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard Asli (Sudah dilengkapi dengan logika kategori untuk grafik)
     Route::get('/dashboard', function () {
         $totalBuku = Book::count();
+        $totalAnggota = Member::count();
+        $totalDipinjam = Transaction::where('status', 'dipinjam')->count();
+        $totalStok = Book::sum('stok');
         $recentBooks = Book::latest()->take(6)->get();
+        $recentTransactions = Transaction::with(['book', 'member'])->latest()->take(4)->get();
         
         // Logika untuk mengisi grafik persentase kategori
         $categoryStats = Book::select('kategori', DB::raw('count(*) as total'))
@@ -24,14 +30,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->get()
             ->map(function ($item) use ($totalBuku) {
                 return [
-                    'label' => $item->kategori,
+                    'label' => $item->kategori ?? 'Tanpa Kategori',
+                    'total' => $item->total,
                     'percentage' => $totalBuku > 0 ? round(($item->total / $totalBuku) * 100) : 0
                 ];
             });
 
         return view('dashboard', compact(
             'totalBuku',
+            'totalAnggota',
+            'totalDipinjam',
+            'totalStok',
             'recentBooks',
+            'recentTransactions',
             'categoryStats'
         ));
     })->name('dashboard');
